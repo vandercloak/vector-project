@@ -4,7 +4,11 @@
       <h1 class="text-2xl font-bold text-gray-800 mb-1">Patient Reports</h1>
       <p class="text-sm text-gray-500">View and monitor patient cardiac reports</p>
     </div>
-    <ReportFilter v-model="patientNameFilter" class="flex-shrink-0 mb-4" />
+    <ReportFilter 
+      :patientNameFilter="patientNameFilter" 
+      :onFilterUpdate="updatePatientNameFilter"
+      class="flex-shrink-0 mb-4" 
+    />
     <div class="flex-1 min-h-0 overflow-hidden">
       <ReportList :filter="{ patientName: patientNameFilter }" />
     </div>
@@ -25,8 +29,13 @@ export default defineComponent({
   setup() {
     const patientNameFilter = ref('');
     
+    const updatePatientNameFilter = (value: string) => {
+      patientNameFilter.value = value;
+    };
+    
     return {
-      patientNameFilter
+      patientNameFilter,
+      updatePatientNameFilter
     };
   }
 });
