@@ -1,55 +1,58 @@
-import { describe, it, expect } from 'vitest'
 import { mount } from '@vue/test-utils'
 import ReportFilter from '../ReportFilter.vue'
-import SearchIcon from '@/icons/SearchIcon.vue'
+import { describe, it, expect, vi } from 'vitest'
 
 describe('ReportFilter.vue', () => {
-  it('renders correctly', () => {
+  it('renders correctly with default props', () => {
+    const onFilterUpdate = vi.fn()
     const wrapper = mount(ReportFilter, {
-      global: {
-        components: { SearchIcon },
+      props: {
+        patientNameFilter: '',
+        onFilterUpdate,
       },
     })
-    expect(wrapper.find('h3').text()).toBe('Filter Reports:')
-    expect(wrapper.find('input').attributes('placeholder')).toBe('Search by patient name...')
+
+    expect(wrapper.find('input').exists()).toBe(true)
+    expect(wrapper.find('button').exists()).toBe(false) // Clear button shouldn't be visible with empty filter
   })
 
-  it('emits update:modelValue event when input changes', async () => {
+  it('shows clear button when filter has value', () => {
+    const onFilterUpdate = vi.fn()
     const wrapper = mount(ReportFilter, {
-      global: {
-        components: { SearchIcon },
+      props: {
+        patientNameFilter: 'Test',
+        onFilterUpdate,
       },
     })
 
-    await wrapper.find('input').setValue('John Smith')
-    expect(wrapper.emitted('update:modelValue')).toBeTruthy()
-    expect(wrapper.emitted('update:modelValue')![0]).toEqual(['John Smith'])
-  })
-
-  it('displays clear button only when there is input', async () => {
-    const wrapper = mount(ReportFilter, {
-      props: { modelValue: '' },
-      global: {
-        components: { SearchIcon },
-      },
-    })
-
-    expect(wrapper.find('button').exists()).toBe(false)
-
-    await wrapper.setProps({ modelValue: 'test' })
     expect(wrapper.find('button').exists()).toBe(true)
   })
 
-  it('emits empty string when clear button is clicked', async () => {
+  it('calls onFilterUpdate when input changes', async () => {
+    const onFilterUpdate = vi.fn()
     const wrapper = mount(ReportFilter, {
-      props: { modelValue: 'test' },
-      global: {
-        components: { SearchIcon },
+      props: {
+        patientNameFilter: '',
+        onFilterUpdate,
+      },
+    })
+
+    const input = wrapper.find('input')
+    await input.setValue('test')
+
+    expect(onFilterUpdate).toHaveBeenCalledWith('test')
+  })
+
+  it('calls onFilterUpdate with empty string when clear button is clicked', async () => {
+    const onFilterUpdate = vi.fn()
+    const wrapper = mount(ReportFilter, {
+      props: {
+        patientNameFilter: 'test', // Non-empty to show the clear button
+        onFilterUpdate,
       },
     })
 
     await wrapper.find('button').trigger('click')
-    expect(wrapper.emitted('update:modelValue')).toBeTruthy()
-    expect(wrapper.emitted('update:modelValue')![0]).toEqual([''])
+    expect(onFilterUpdate).toHaveBeenCalledWith('')
   })
 })

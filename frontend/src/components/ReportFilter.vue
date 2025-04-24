@@ -32,13 +32,11 @@
 import SearchIcon from '@/icons/SearchIcon.vue'
 import XIcon from '@/icons/XIcon.vue'
 
-// Define props with defaults
+// Define props with callbacks
 const props = defineProps<{
   patientNameFilter: string
   onFilterUpdate: (value: string) => void
 }>()
-
-// No need for default props since TypeScript will enforce required props
 
 const updateFilter = (event: Event) => {
   const target = event.target as HTMLInputElement
