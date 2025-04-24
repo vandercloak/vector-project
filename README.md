@@ -92,7 +92,7 @@ docker-compose up -d mysql
 
 #### Env
 
-Switch the local .env to use DB_HOST=localhost to use the local mysql instance.
+Switch the local .env to use DB_HOST=localhost to use the local mysql instance when running the backend outside of docker.
 
 ## Features
 
