@@ -19,18 +19,38 @@
       <table class="w-full table-fixed divide-y divide-gray-200">
         <thead class="bg-gray-50 sticky top-0 z-10">
           <tr>
-            <th scope="col" class="w-1/5 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Patient</th>
-            <th scope="col" class="w-1/5 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-            <th scope="col" class="w-2/5 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Summary</th>
-            <th scope="col" class="w-1/5 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+            <th
+              scope="col"
+              class="w-1/5 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+            >
+              Patient
+            </th>
+            <th
+              scope="col"
+              class="w-1/5 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+            >
+              Date
+            </th>
+            <th
+              scope="col"
+              class="w-2/5 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+            >
+              Summary
+            </th>
+            <th
+              scope="col"
+              class="w-1/5 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+            >
+              Status
+            </th>
           </tr>
         </thead>
         <tbody class="bg-white divide-y divide-gray-200">
-          <tr 
-            v-for="report in reports" 
+          <tr
+            v-for="report in reports"
             :key="report.id"
             :class="{
-              'bg-red-50': report.hasTachycardia || report.hasArrhythmia
+              'bg-red-50': report.hasTachycardia || report.hasArrhythmia,
             }"
           >
             <td class="px-6 py-4 truncate">
@@ -44,13 +64,22 @@
             </td>
             <td class="px-6 py-4 text-sm">
               <div class="flex gap-2 flex-wrap">
-                <span v-if="report.hasTachycardia" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                <span
+                  v-if="report.hasTachycardia"
+                  class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800"
+                >
                   ⚠️ Tachycardia
                 </span>
-                <span v-if="report.hasArrhythmia" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                <span
+                  v-if="report.hasArrhythmia"
+                  class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800"
+                >
                   ⚠️ Arrhythmia
                 </span>
-                <span v-if="!report.hasTachycardia && !report.hasArrhythmia" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                <span
+                  v-if="!report.hasTachycardia && !report.hasArrhythmia"
+                  class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800"
+                >
                   Normal
                 </span>
               </div>
@@ -62,61 +91,51 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref, watch, onMounted } from 'vue'
+<script setup lang="ts">
+import { ref, watch, onMounted } from 'vue'
 import { getReports } from '../services/api'
 import type { Report } from '../types/report'
 
-export default defineComponent({
-  name: 'ReportList',
-  props: {
-    filter: {
-      type: Object,
-      default: () => ({}),
-    },
-  },
-  setup(props) {
-    const reports = ref<Report[]>([])
-    const loading = ref(true)
-    const error = ref<string | null>(null)
+interface ReportFilter {
+  patientName?: string
+}
 
-    const fetchReports = async () => {
-      loading.value = true
-      error.value = null
+const props = defineProps<{
+  filter: ReportFilter
+}>()
 
-      try {
-        reports.value = await getReports(props.filter)
-      } catch (err) {
-        error.value = 'Failed to load reports. Please try again.'
-        console.error(err)
-      } finally {
-        loading.value = false
-      }
-    }
+const reports = ref<Report[]>([])
+const loading = ref(true)
+const error = ref<string | null>(null)
 
-    const formatDate = (dateString: string) => {
-      const date = new Date(dateString)
-      return new Intl.DateTimeFormat('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-      }).format(date)
-    }
+const fetchReports = async () => {
+  loading.value = true
+  error.value = null
 
-    // Fetch reports when filter changes
-    watch(() => props.filter, fetchReports, { deep: true })
+  try {
+    reports.value = await getReports(props.filter)
+  } catch (err) {
+    error.value = 'Failed to load reports. Please try again.'
+    console.error(err)
+  } finally {
+    loading.value = false
+  }
+}
 
-    // Initial fetch
-    onMounted(fetchReports)
+const formatDate = (dateString: string) => {
+  const date = new Date(dateString)
+  return new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  }).format(date)
+}
 
-    return {
-      reports,
-      loading,
-      error,
-      formatDate,
-    }
-  },
-})
+// Fetch reports when filter changes
+watch(() => props.filter, fetchReports, { deep: true })
+
+// Initial fetch
+onMounted(fetchReports)
 </script>

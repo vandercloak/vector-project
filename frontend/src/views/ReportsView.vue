@@ -15,28 +15,14 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue';
-import ReportList from '../components/ReportList.vue';
-import ReportFilter from '../components/ReportFilter.vue';
+<script setup lang="ts">
+import { ref } from 'vue'
+import ReportList from '../components/ReportList.vue'
+import ReportFilter from '../components/ReportFilter.vue'
 
-export default defineComponent({
-  name: 'ReportsView',
-  components: {
-    ReportList,
-    ReportFilter
-  },
-  setup() {
-    const patientNameFilter = ref('');
-    
-    const updatePatientNameFilter = (value: string) => {
-      patientNameFilter.value = value;
-    };
-    
-    return {
-      patientNameFilter,
-      updatePatientNameFilter
-    };
-  }
-});
+const patientNameFilter = ref('')
+
+const updatePatientNameFilter = (value: string) => {
+  patientNameFilter.value = value
+}
 </script>
