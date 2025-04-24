@@ -9,6 +9,38 @@ A full-stack application for viewing patient medical reports with visual alerts 
 - **Database**: MySQL
 - **Containerization**: Docker + docker-compose
 
+## Requirements Checklist
+
+### 🏆 Project Requirements Completed
+
+#### Backend
+
+- ✅ Implemented endpoint that returns a list of patient reports
+- ✅ Reports include id, patientName, date, and summary fields
+- ✅ API supports filtering by patientName
+- ✅ MySQL database implementation for reports data
+
+#### Frontend
+
+- ✅ Created web page that fetches reports via API
+- ✅ Implemented filtering reports by patientName
+- ✅ Added visual alerts for "tachycardia" and "arrhythmia" keywords
+- ✅ Responsive design with Tailwind CSS
+
+#### Bonus
+
+- ✅ Used TypeScript throughout the application
+- ✅ Added comprehensive unit and E2E tests
+- ✅ Implemented API response caching
+- ✅ Dockerized the solution with docker-compose
+
+#### Other Requirements
+
+- ✅ Clear instructions for running the project
+- ✅ No authentication required as specified
+- ✅ Clean, readable code following modern best practices
+- ✅ Efficient queries with proper indexing
+
 ## Setup Instructions
 
 ### Prerequisites
@@ -26,7 +58,7 @@ docker-compose up
 ```
 
 3. Access the application:
-   - Frontend: http://localhost:8080
+   - Frontend: http://localhost:5173
    - Backend API: http://localhost:3000
 
 ### Local Development
