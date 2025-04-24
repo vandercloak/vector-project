@@ -2,6 +2,10 @@
 
 A full-stack application for viewing patient medical reports with visual alerts for critical conditions.
 
+## Demo
+
+View the live demo: [https://vector-project.vercel.app/](https://vector-project.vercel.app/)
+
 ## Project Structure
 
 - **Frontend**: Vue 3 + Vite + Tailwind CSS
