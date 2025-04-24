@@ -15,78 +15,118 @@
     >
       No reports found for the current filter.
     </div>
-    <div v-else class="h-full overflow-auto shadow-sm rounded-lg border border-gray-200">
-      <table class="w-full table-fixed divide-y divide-gray-200">
-        <thead class="bg-gray-50 sticky top-0 z-10">
-          <tr>
-            <th
-              scope="col"
-              class="w-1/5 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+    <div v-else class="h-full overflow-auto">
+      <!-- Mobile card layout -->
+      <div class="block md:hidden">
+        <div
+          v-for="report in reports"
+          :key="report.id"
+          :class="{
+            'bg-red-50': report.hasTachycardia || report.hasArrhythmia,
+            'bg-white': !report.hasTachycardia && !report.hasArrhythmia,
+          }"
+          class="mb-3 p-4 rounded-lg border border-gray-200 shadow-sm"
+        >
+          <div class="font-medium text-gray-900 text-lg mb-1">{{ report.patientName }}</div>
+          <div class="text-sm text-gray-500 mb-2">{{ formatDate(report.date) }}</div>
+          <div class="text-sm text-gray-600 mb-3">{{ report.summary }}</div>
+          <div class="flex gap-2 flex-wrap">
+            <span
+              v-if="report.hasTachycardia"
+              class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800"
             >
-              Patient
-            </th>
-            <th
-              scope="col"
-              class="w-1/5 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              ⚠️ Tachycardia
+            </span>
+            <span
+              v-if="report.hasArrhythmia"
+              class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800"
             >
-              Date
-            </th>
-            <th
-              scope="col"
-              class="w-2/5 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              ⚠️ Arrhythmia
+            </span>
+            <span
+              v-if="!report.hasTachycardia && !report.hasArrhythmia"
+              class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800"
             >
-              Summary
-            </th>
-            <th
-              scope="col"
-              class="w-1/5 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              Normal
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Desktop table layout -->
+      <div class="hidden md:block shadow-sm rounded-lg border border-gray-200">
+        <table class="w-full table-fixed divide-y divide-gray-200">
+          <thead class="bg-gray-50 sticky top-0 z-10">
+            <tr>
+              <th
+                scope="col"
+                class="w-1/5 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >
+                Patient
+              </th>
+              <th
+                scope="col"
+                class="w-1/5 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >
+                Date
+              </th>
+              <th
+                scope="col"
+                class="w-2/5 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >
+                Summary
+              </th>
+              <th
+                scope="col"
+                class="w-1/5 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+              >
+                Status
+              </th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            <tr
+              v-for="report in reports"
+              :key="report.id"
+              :class="{
+                'bg-red-50': report.hasTachycardia || report.hasArrhythmia,
+              }"
             >
-              Status
-            </th>
-          </tr>
-        </thead>
-        <tbody class="bg-white divide-y divide-gray-200">
-          <tr
-            v-for="report in reports"
-            :key="report.id"
-            :class="{
-              'bg-red-50': report.hasTachycardia || report.hasArrhythmia,
-            }"
-          >
-            <td class="px-6 py-4 truncate">
-              <div class="font-medium text-gray-900">{{ report.patientName }}</div>
-            </td>
-            <td class="px-6 py-4 truncate text-sm text-gray-500">
-              {{ formatDate(report.date) }}
-            </td>
-            <td class="px-6 py-4 text-sm text-gray-500">
-              <div class="line-clamp-2">{{ report.summary }}</div>
-            </td>
-            <td class="px-6 py-4 text-sm">
-              <div class="flex gap-2 flex-wrap">
-                <span
-                  v-if="report.hasTachycardia"
-                  class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800"
-                >
-                  ⚠️ Tachycardia
-                </span>
-                <span
-                  v-if="report.hasArrhythmia"
-                  class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800"
-                >
-                  ⚠️ Arrhythmia
-                </span>
-                <span
-                  v-if="!report.hasTachycardia && !report.hasArrhythmia"
-                  class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800"
-                >
-                  Normal
-                </span>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+              <td class="px-6 py-4 truncate">
+                <div class="font-medium text-gray-900">{{ report.patientName }}</div>
+              </td>
+              <td class="px-6 py-4 truncate text-sm text-gray-500">
+                {{ formatDate(report.date) }}
+              </td>
+              <td class="px-6 py-4 text-sm text-gray-500">
+                <div class="line-clamp-2">{{ report.summary }}</div>
+              </td>
+              <td class="px-6 py-4 text-sm">
+                <div class="flex gap-2 flex-wrap">
+                  <span
+                    v-if="report.hasTachycardia"
+                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800"
+                  >
+                    ⚠️ Tachycardia
+                  </span>
+                  <span
+                    v-if="report.hasArrhythmia"
+                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800"
+                  >
+                    ⚠️ Arrhythmia
+                  </span>
+                  <span
+                    v-if="!report.hasTachycardia && !report.hasArrhythmia"
+                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800"
+                  >
+                    Normal
+                  </span>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </template>
