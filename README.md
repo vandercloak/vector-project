@@ -47,6 +47,16 @@ npm install
 npm run dev
 ```
 
+#### Database (in docker)
+
+```bash
+docker-compose up -d mysql
+```
+
+#### Env
+
+Switch the local .env to use DB_HOST=localhost to use the local mysql instance.
+
 ## Features
 
 - View patient medical reports with filtering capability

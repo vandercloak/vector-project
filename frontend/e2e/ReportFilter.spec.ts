@@ -7,6 +7,9 @@ test('can filter reports and verify John Smith has Tachycardia', async ({ page }
   // Type in the filter
   await page.fill('input[placeholder="Search by patient name..."]', 'John Smith')
 
+  // Wait for the filter to update.
+  await page.waitForTimeout(200)
+
   // Validate filtered results using the table structure
   // Either check specific patient names in the table:
   await expect(page.locator('tbody tr td:first-child')).toContainText('John Smith')

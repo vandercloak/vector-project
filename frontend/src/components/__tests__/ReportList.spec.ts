@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { mount, flushPromises } from '@vue/test-utils'
 import ReportList from '../ReportList.vue'
 import { getReports } from '@/services/api'
@@ -9,6 +9,9 @@ vi.mock('@/services/api', () => ({
 }))
 
 describe('ReportList.vue', () => {
+  // Spy on console.error
+  let consoleErrorSpy: any
+
   const mockReports = [
     {
       id: 1,
@@ -30,6 +33,13 @@ describe('ReportList.vue', () => {
 
   beforeEach(() => {
     vi.clearAllMocks()
+    // Set up the spy before each test
+    consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
+  })
+
+  afterEach(() => {
+    // Restore console.error after each test
+    consoleErrorSpy.mockRestore()
   })
 
   it('displays loading state initially', () => {

@@ -22,12 +22,17 @@ app.use("/api/reports", reportRoutes);
 describe("Reports API", () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    jest.spyOn(cache, "get").mockReturnValue(null);
-    // Clear cache before each test
-    Object.keys(cache).forEach((key) => {
-      if (cache.get(key)) {
-        cache.set(key, null);
-      }
+
+    // Mock console.error to suppress error output during tests
+    jest.spyOn(console, "error").mockImplementation(() => {});
+
+    // Mock the cache with an in-memory store for tests
+    const mockCacheStore: Record<string, any> = {};
+    jest
+      .spyOn(cache, "get")
+      .mockImplementation((key: string) => mockCacheStore[key] || null);
+    jest.spyOn(cache, "set").mockImplementation((key: string, value: any) => {
+      mockCacheStore[key] = value;
     });
   });
 
