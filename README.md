@@ -12,6 +12,7 @@ View the live demo: [https://vector-project.vercel.app/](https://vector-project.
 - **Backend**: Node.js + Express + TypeScript
 - **Database**: MySQL
 - **Containerization**: Docker + docker-compose
+- **Cloud**: Heroku SQL/API + Vercel for frontend
 
 ## Requirements Checklist
 
