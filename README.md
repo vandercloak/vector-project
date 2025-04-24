@@ -120,6 +120,32 @@ npm test
 
 Run the unit tests:
 
+```bash
+cd frontend
+npm run test:unit
 ```
 
+#### End-to-End Testing with Playwright
+
+Run the E2E tests:
+
+```bash
+cd frontend
+npm run test:e2e
+```
+
+## Linting and Formatting
+
+To lint the frontend codebase:
+
+```bash
+cd frontend
+npm run lint
+```
+
+To format the frontend code:
+
+```bash
+cd frontend
+npm run format
 ```
