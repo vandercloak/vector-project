@@ -1,6 +1,6 @@
 import type { Report } from '../types/report'
 
-const API_BASE_URL = '/api'
+const API_BASE_URL = `${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api`
 
 export async function getReports(filters: { patientName?: string } = {}): Promise<Report[]> {
   // Build URL with query parameters
